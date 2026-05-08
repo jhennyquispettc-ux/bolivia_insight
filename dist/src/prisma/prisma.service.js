@@ -10,14 +10,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrismaService = void 0;
+require("dotenv/config");
 const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
-const adapter_libsql_1 = require("@prisma/adapter-libsql");
+const pg_1 = require("pg");
+const adapter_pg_1 = require("@prisma/adapter-pg");
 let PrismaService = class PrismaService extends client_1.PrismaClient {
     constructor() {
-        const adapter = new adapter_libsql_1.PrismaLibSql({
-            url: process.env.DATABASE_URL || 'file:./dev.db',
+        const pool = new pg_1.Pool({
+            connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/bolivia_insight?schema=public',
         });
+        const adapter = new adapter_pg_1.PrismaPg(pool);
         super({ adapter });
     }
     async onModuleInit() {
