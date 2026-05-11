@@ -7,11 +7,26 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  googleId  String   @unique
-  email     String   @unique
+  id        Int       @id @default(autoincrement())
+  googleId  String    @unique
+  email     String    @unique
   name      String?
   picture   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  bookings  Booking[]
+}
+
+model Booking {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  date        DateTime
+  timeSlot    String
+  topic       String
+  notes       String?
+  status      String   @default("confirmed")
+  calendarId  String?
+  calendarLink String?
+  createdAt   DateTime @default(now())
 }
